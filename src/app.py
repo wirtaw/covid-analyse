@@ -27,14 +27,16 @@ def log(function):
     return inner
 
 
-class Greeter():
+class Application():
     """Example function with types documented in the docstring."""
 
     def __init__(self):
-        self.message = 'Welcome!'
+        self.message = 'Welcome to the COVID-19 analyse app!'
+        self.countries = []
+        self.period = 0
 
     def set_message(self, message):
-        """Function description."""
+        """Welcome message."""
         self.message = message
 
     @log
@@ -42,10 +44,34 @@ class Greeter():
         """Function description."""
         print(self.message)
 
+    def set_period(self, period=None):
+        """Set period in the days. (default 7)"""
+        if period and isinstance(period, str):
+            if period.isnumeric():
+                self.period = int(period)
+            else:
+                self.period = 7
+        else:
+            if period and isinstance(period, int):
+                self.period = period
+            else:
+                self.period = 7
+
+    def set_countries(self, countries=None):
+        """Set list of the countries (ISO) divided by comma.
+        Default (['USA', 'CHN', 'ITA'])"""
+        if countries and isinstance(countries, str):
+            if countries.find(',') != -1:
+                self.countries = countries.split(',')
+            else:
+                self.countries.append(countries)
+        else:
+            self.countries = ['USA', 'CHN', 'ITA']
+
 
 def main(args):
     """ Main entry point of the app """
-    Greeter().print_message()
+    Application().print_message()
     logger.info(args)
 
 
@@ -60,6 +86,8 @@ if __name__ == "__main__":
 
     # Optional argument which requires a parameter (eg. -d test)
     PARSER.add_argument("-n", "--name", action="store", dest="name")
+    PARSER.add_argument("-c", "--countries", action="store", dest="countries")
+    PARSER.add_argument("-p", "--period", action="store", dest="period")
 
     # Optional verbosity counter (eg. -v, -vv, -vvv, etc.)
     PARSER.add_argument(

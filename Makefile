@@ -21,18 +21,17 @@ help:
 	@echo " * deps-install - Install dependencies (see requirements.txt)."
 	@echo " * deps-update  - Update dependencies (pur)."
 	@echo " * deps-create  - Create dependencies (pipreqs)."
-	@echo " * feedback     - Create a GitHub issue."
 
 run:
-	@$(PYTHON) $(SRC_CORE)/hello.py -f -n Foo test
+	@$(PYTHON) $(SRC_CORE)/app.py -f -n Foo test
 
 test:
 	@type coverage >/dev/null 2>&1 || (echo "Run '$(PIP) install coverage' first." >&2 ; exit 1)
-	@coverage run --source . -m $(SRC_TEST).test_hello
+	@coverage run --source . -m $(SRC_TEST).test_app
 	@coverage report
 
 doc:
-	@$(PYDOC) src.hello
+	@$(PYDOC) src.app
 
 clean:
 	@rm -f $(SRC_CORE)/*.pyc
@@ -85,6 +84,3 @@ deps-install:
 deps-create:
 	@type pipreqs >/dev/null 2>&1 || (echo "Run '$(PIP) install pipreqs' first." >&2 ; exit 1)
 	@pipreqs --use-local --force .
-
-feedback:
-	@open https://github.com/AlexanderWillner/python-boilerplate/issues
