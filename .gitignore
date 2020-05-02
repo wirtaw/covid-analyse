@@ -98,4 +98,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# IDE
 .idea/
+
+# JSON in the data
+/data/*.json

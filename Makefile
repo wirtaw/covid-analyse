@@ -23,7 +23,7 @@ help:
 	@echo " * deps-create  - Create dependencies (pipreqs)."
 
 run:
-	@$(PYTHON) $(SRC_CORE)/app.py -f -n Foo test
+	@$(PYTHON) $(SRC_CORE)/app.py -f -n Name -p 7 -c LTU,UKR,POL,LVA,RUS,BLR
 
 test:
 	@type coverage >/dev/null 2>&1 || (echo "Run '$(PIP) install coverage' first." >&2 ; exit 1)

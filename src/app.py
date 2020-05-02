@@ -14,21 +14,31 @@ __maintainer__ = "Vladimir Poplavskij"
 __email__ = "float45@gmail.com"
 __status__ = "Development"
 
+import os
+import sys
 import argparse
 from logzero import logger
 
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, PROJECT_DIR)
+
+import scrapping
+
+
 def log(function):
     """Handy logging decorator."""
+
     def inner(*args, **kwargs):
         """Innter method."""
         logger.debug(function)
         function(*args, **kwargs)
+
     return inner
 
 
 class Application():
-    """Example function with types documented in the docstring."""
+    """Main application"""
 
     def __init__(self):
         self.message = 'Welcome to the COVID-19 analyse app!'
@@ -71,15 +81,24 @@ class Application():
 
 def main(args):
     """ Main entry point of the app """
-    Application().print_message()
+    app = Application()
+    if args and args.period:
+        app.set_period(args.period)
+    if args and args.countries:
+        app.set_countries(args.countries)
+    app.print_message()
+
+    if args and args.period and args.countries:
+        scrapper = scrapping.Scrapper(app.period,
+                                      app.countries,
+                                      './data/countriesData.json')
+        scrapper.init()
+
     logger.info(args)
 
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser()
-
-    # Required positional argument
-    PARSER.add_argument("arg", help="Required positional argument")
 
     # Optional argument flag which defaults to False
     PARSER.add_argument("-f", "--flag", action="store_true", default=False)
