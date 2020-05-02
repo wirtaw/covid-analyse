@@ -9,7 +9,7 @@ from datetime import date
 
 
 class Scrapper:
-    """Scrapper application"""
+    """Scrapper module"""
 
     def __init__(self, period, countries, filename):
         self.api_endpoints = {
@@ -39,13 +39,14 @@ class Scrapper:
         arr = []
         today = date.today()
         dateordinal = today.toordinal()
-        preiod_iterator = 1
-        while preiod_iterator < self.period:
+        period_iterator = 1
+
+        while period_iterator < self.period:
             dateordinal = dateordinal - 1
             formatdate = date.fromordinal(dateordinal).isoformat()
             reports = self.api_endpoints['reports']
             arr.append(f"{reports}?date={formatdate}&iso={iso}")
-            preiod_iterator += 1
+            period_iterator += 1
         return arr
 
     def get_request_covid(self, query):

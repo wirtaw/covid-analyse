@@ -19,12 +19,16 @@ import sys
 import argparse
 from logzero import logger
 
-
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PROJECT_DIR)
 
-import scrapping
+# pylint: disable=wrong-import-position
 
+import scrapping
+import analyze
+
+
+# pylint: enable=wrong-import-position
 
 def log(function):
     """Handy logging decorator."""
@@ -89,10 +93,14 @@ def main(args):
     app.print_message()
 
     if args and args.period and args.countries:
+        file_name = './../data/countriesData.json'
+        chart_filename = './../resources/output.png'
         scrapper = scrapping.Scrapper(app.period,
                                       app.countries,
-                                      './data/countriesData.json')
+                                      file_name)
         scrapper.init()
+        analytics = analyze.Analyze(file_name, chart_filename)
+        analytics.init()
 
     logger.info(args)
 
