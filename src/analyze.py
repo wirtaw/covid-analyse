@@ -54,12 +54,12 @@ class Analyze:
         """Get data by countries """
         arr = []
         for key, values in country_dictionary.items():
-            if key == country_title:
+            if key == country_title[0]:
                 for row in values:
                     selected_row = []
                     for item in columns['names']:
                         selected_row.append(row[item])
-                    selected_row.append(country_title)
+                    selected_row.append(country_title[0])
                     arr.append(selected_row)
         return arr
 
@@ -84,7 +84,8 @@ class Analyze:
                 'fatality_rate',
                 'region'
             ],
-            'names': []
+            'names': [],
+            'exclude': ['region'],
         }
         with open(self.filename) as file_stream:
             for json_obj in file_stream:
@@ -98,7 +99,7 @@ class Analyze:
             objects = ijson.kvitems(file_stream, 'data.Russia.item')
             for key in objects:
                 if key[0] and key[0] not in columns['infile'] \
-                        and key[0] not in ['region']:
+                        and key[0] not in columns['exclude']:
                     columns['infile'].append(key[0])
                     columns['names'].append(key[0])
             # confirmed = (v for k, v in objects if k == 'confirmed')

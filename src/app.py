@@ -26,9 +26,10 @@ sys.path.insert(0, PROJECT_DIR)
 
 import scrapping
 import analyze
-
+import forecast
 
 # pylint: enable=wrong-import-position
+
 
 def log(function):
     """Handy logging decorator."""
@@ -94,13 +95,25 @@ def main(args):
 
     if args and args.period and args.countries:
         file_name = './../data/countriesData.json'
-        chart_filename = './../resources/output.png'
+        # chart_filename = './../resources/output.png'
+
         scrapper = scrapping.Scrapper(app.period,
                                       app.countries,
                                       file_name)
         scrapper.init()
-        analytics = analyze.Analyze(file_name, chart_filename)
-        analytics.init()
+        # analytics = analyze.Analyze(file_name, chart_filename)
+        # analytics.init()
+        days = app.period
+        country = app.countries[0]
+        chart_filename_forecast = \
+            f"./../resources/output_forecast_{country}.png"
+        fr_cast = forecast.Forecast(file_name,
+                                    country,
+                                    days,
+                                    chart_filename_forecast)
+        forecast_result = fr_cast.get_forecast()
+        print(f"result in {country} "
+              f"will {forecast_result} confirmed after {days} days")
 
     logger.info(args)
 
