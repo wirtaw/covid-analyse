@@ -9,6 +9,7 @@ import ijson
 import pandas as pd
 import statsmodels.api as sm
 import seaborn as sns
+from datetime import date
 
 sns.set(style='whitegrid')
 
@@ -89,7 +90,8 @@ class Forecast:
 
         if country_dict['data']:
             for key in country_dict['data'].items():
-                if key[0] == self.country:
+                if key[0] == self.country \
+                        or key[1][0]['region']['iso'] == self.country:
                     countries.append(key)
 
         with open(self.filename, 'r') as file_stream:
@@ -140,9 +142,19 @@ class Forecast:
             forecast_data.append([
                 data[time_counter][2],
                 int(x_start * math.pow(b_coef, time_counter))])
-            time_counter = time_counter + 1
 
-        dates = pd.date_range(start_date, periods=length, freq="D")
+            time_counter = time_counter + 1
+        today = date.today()
+        date_ordinal = today.toordinal() + 1
+        length_after_period = self.after_days + time_counter
+        while time_counter < length_after_period:
+            forecast_data.append([
+                data[length-1][2],
+                int(x_start * math.pow(b_coef, time_counter))])
+            time_counter = time_counter + 1
+            date_ordinal = date_ordinal + 1
+
+        dates = pd.date_range(start_date, periods=length_after_period, freq="D")
 
         pandas_data_frame_forecast = pd.DataFrame(
             forecast_data,

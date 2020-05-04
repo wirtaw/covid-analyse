@@ -25,7 +25,7 @@ sys.path.insert(0, PROJECT_DIR)
 # pylint: disable=wrong-import-position
 
 import scrapping
-import analyze
+# import analyze
 import forecast
 
 # pylint: enable=wrong-import-position
@@ -104,16 +104,16 @@ def main(args):
         # analytics = analyze.Analyze(file_name, chart_filename)
         # analytics.init()
         days = app.period
-        country = app.countries[0]
-        chart_filename_forecast = \
-            f"./../resources/output_forecast_{country}.png"
-        fr_cast = forecast.Forecast(file_name,
-                                    country,
-                                    days,
-                                    chart_filename_forecast)
-        forecast_result = fr_cast.get_forecast()
-        print(f"result in {country} "
-              f"will {forecast_result} confirmed after {days} days")
+        for country in app.countries:
+            chart_filename_forecast = \
+                f"./../resources/output_forecast_{country}.png"
+            fr_cast = forecast.Forecast(file_name,
+                                        country,
+                                        days,
+                                        chart_filename_forecast)
+            forecast_result = fr_cast.get_forecast()
+            print(f"result in {country} "
+                  f"will {forecast_result} confirmed after 3 days")
 
     logger.info(args)
 
